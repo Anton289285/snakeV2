@@ -1,6 +1,6 @@
 from tkinter import *
 
-quantity_of_column_row = 10#must renamed!!!
+quantity_of_column_row = 10
 size_of_column_row = 50
 """
 segment_style_head_color = "black"

@@ -2,6 +2,7 @@ from tkinter import *
 from random import *
 import constant as const
 import rec_mod as rec
+import can_vid_mod as cvid
 
 class Some_window:
     root = Tk()
@@ -339,6 +340,12 @@ class Some_game:
         self.record = rec.Some_record('./record/record.txt')
         self.info.update_value("record", self.record.apple)
         self.trigger = False
+        self.canvas_vidjet = cvid.Canvas_widjet(const.quantity_of_column_row,
+                                                const.size_of_column_row,
+                                                self.canvas.canvas,
+                                                self.window.root,
+                                                self.record.recordsman)
+        #self.canvas_vidjet.draw(self.record.apple, self.record.recordsman)
 
     def set_move_left(self, event):
         if (((self.snake.body[0].column - 1) != self.snake.body[1].column) or
@@ -378,6 +385,19 @@ class Some_game:
             self.snake.change_style_to_death()
             self.game_status = "game over"
             self.info.update_value("info", self.game_status)
+            if self.trigger == True:
+                self.game_status = "enter record"
+                self.canvas_vidjet.draw(self.info.apple_value, self.record.recordsman)
+                self.id_for_unbind_enter = self.window.root.bind("<Return>",
+                                                                 self.redraw_canvas_widjet)
+
+
+    def redraw_canvas_widjet(self, event):
+        string = self.canvas_vidjet.entry.get()
+        self.record.update(string, self.info.apple_value)
+        self.canvas_vidjet.erase()
+        self.window.root.unbind("<Return>")
+        self.game_status = "game over"
 
     def check_self_crossing(self):
         self_crossing = False
@@ -407,9 +427,6 @@ class Some_game:
                     (self.trigger == False)):
                     self.canvas.change_style("low")
                     self.trigger = True
-                if (self.record.apple < self.info.apple_value):
-                    self.record.update("Anton", self.info.apple_value)
-                    self.info.update_value("record", self.record.apple)
 
     def game_restart(self, event):
         if self.game_status == "game over":
