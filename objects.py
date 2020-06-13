@@ -339,13 +339,13 @@ class Some_game:
         self.info.update_value("speed", self.game_speed)
         self.record = rec.Some_record('./record/record.txt')
         self.info.update_value("record", self.record.apple)
+        self.record_for_heaven = rec.Some_record('./record/record_heaven.txt')
         self.trigger = False
         self.canvas_vidjet = cvid.Canvas_widjet(const.quantity_of_column_row,
                                                 const.size_of_column_row,
                                                 self.canvas.canvas,
                                                 self.window.root,
                                                 self.record.recordsman)
-        #self.canvas_vidjet.draw(self.record.apple, self.record.recordsman)
 
     def set_move_left(self, event):
         if (((self.snake.body[0].column - 1) != self.snake.body[1].column) or
@@ -379,8 +379,16 @@ class Some_game:
 
         if not(self.check_self_crossing() or self.check_way_out()):
             self.snake_append_apple()
-            self.anchor_move_snake = self.window.root.after(self.translate_speed_to_time_delay(), self.move_snake)
-            self.snake.rotate_style()
+            if len(self.snake.body) == ((const.quantity_of_column_row *
+                                         const.quantity_of_column_row) - 1):
+                self.game_status = "heaven"
+                self.snake.change_style_to_heaven()
+                self.canvas_vidjet.draw(self.info.apple_value, "The chosen one")
+                self.id_for_unbind_enter = self.window.root.bind("<Return>",
+                                                                 self.heaven)
+            else:
+                self.anchor_move_snake = self.window.root.after(self.translate_speed_to_time_delay(), self.move_snake)
+                self.snake.rotate_style()
         else:
             self.snake.change_style_to_death()
             self.game_status = "game over"
@@ -392,12 +400,21 @@ class Some_game:
                                                                  self.redraw_canvas_widjet)
 
 
+    def heaven(self, event):
+        string = self.canvas_vidjet.entry.get()
+        self.record_for_heaven.update(string, self.info.apple_value)
+        self.canvas_vidjet.erase()
+        self.window.root.unbind("<Return>")
+        self.game_status = "game_over"
+
+
     def redraw_canvas_widjet(self, event):
         string = self.canvas_vidjet.entry.get()
         self.record.update(string, self.info.apple_value)
         self.canvas_vidjet.erase()
         self.window.root.unbind("<Return>")
         self.game_status = "game over"
+
 
     def check_self_crossing(self):
         self_crossing = False
