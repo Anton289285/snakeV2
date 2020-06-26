@@ -405,7 +405,7 @@ class Some_game:
         self.record_for_heaven.update(string, self.info.apple_value)
         self.canvas_vidjet.erase()
         self.window.root.unbind("<Return>")
-        self.game_status = "game_over"
+        self.game_status = "game over"
 
 
     def redraw_canvas_widjet(self, event):

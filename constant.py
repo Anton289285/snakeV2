@@ -1,7 +1,7 @@
 from tkinter import *
 
-quantity_of_column_row = 10
-size_of_column_row = 50
+quantity_of_column_row = 12
+size_of_column_row = 45
 """
 segment_style_head_color = "black"
 segment_style1_color = "orange red"
