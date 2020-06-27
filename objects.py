@@ -468,7 +468,8 @@ class Some_game:
             self.game_status = "pause"
             self.info.update_value("info", self.game_status)
         elif self.game_status == "pause":
-            self.anchor_move_snake = self.move_snake()
+            self.anchor_move_snake = self.window.root.after(self.translate_speed_to_time_delay(),
+                                                            self.move_snake)
             self.game_status = "play"
             self.info.update_value("info", self.game_status)
         elif self.game_status == "game over":
